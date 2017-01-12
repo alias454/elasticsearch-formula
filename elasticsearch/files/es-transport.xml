@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <service>
+    <short>es-transport</short>
+    <description>transport for elasticsearch nodes.</description>
+    <port protocol="tcp" port="9300"/>
+  </service>

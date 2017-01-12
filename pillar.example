@@ -1,0 +1,23 @@
+# Set firewall status to Active or InActive
+firewall:
+  firewalld:
+    status: 'Active'
+    default_zone: 'internal'
+  input_source: [
+                  '192.168.2.0/24',
+                ]
+  allowed_sources: [
+                     '192.168.2.19/32',
+                     '192.168.2.20/32',
+                     '192.168.2.21/32',
+                   ]
+
+# Override host options
+elasticsearch:
+  lookup:
+    elasticsearch:
+      unicast_hosts: ['esnode00','esnode01','esnode02',]
+      restart_service_after_state_change: 'true'
+      es_heap_size: '5g'
+      master_node: 'true'
+      data_node: 'true'

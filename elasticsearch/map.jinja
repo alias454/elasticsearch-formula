@@ -1,0 +1,91 @@
+# Set default setttings
+{% set default_config = salt.grains.filter_by({
+  'default':
+  {
+    'elasticsearch':
+    {
+      'restart_service_after_state_change': 'true',
+      'cluster_name': 'graylog',
+      'master_node': 'false',
+      'data_node': 'true',
+      'log_path': '/var/log/elasticsearch',
+      'data_path': '/elasticsearch/data',
+      'es_heap_size': '2g',
+      'mlockall': 'true',
+      'network_host': '0.0.0.0',
+      'unicast_hosts': [
+                         'esnode00',
+                         'esnode01',
+                         'esnode02',
+                       ],
+      'initial_primaries_recoveries': '2',
+      'concurrent_recoveries': '2',
+      'recovery_max_bytes': '100mb',
+      'recovery_concurrent_streams': '5',
+      'mounts':
+      {
+        'create_data_dir': 'true',
+        'data_dir_name': '/elasticsearch/data',
+        'use_data_mount_device': 'false',
+        'data_mount_fstype': 'xfs',
+        'data_mount_device': '/dev/mapper/vg_data-lv_data',
+        'create_archive_dir': 'true',
+        'archive_dir_name': '/elasticsearch/archive',
+        'use_archive_mount_device': 'false',
+        'archive_mount_fstype': 'xfs',
+        'archive_mount_device': '/dev/mapper/vg_archive-lv_archive',
+      },
+    },
+  },
+  'esnode00':
+  {
+    'elasticsearch':
+    {
+      'master_node': 'true',
+      'data_node': 'false',
+      'es_heap_size': '4g',
+    },
+  },
+  'esnode01':
+  {
+    'elasticsearch':
+    {
+      'master_node': 'false',
+      'data_node': 'true',
+      'es_heap_size': '8g',
+    },
+  },
+  'esnode02':
+  {
+    'elasticsearch':
+    {
+      'master_node': 'false',
+      'data_node': 'true',
+      'es_heap_size': '8g',
+    },
+  },
+}, grain='host', base='default') %}
+
+# Set kernel parameters to tune this instance
+{% set kernel = {
+  'kernel':
+  {
+    'vm_swappiness': '10',
+    'vm_max_map_count': '262144',
+  },
+} %}
+
+# Configure firewall settings specific for this instance
+{% set firewall = {
+  'firewall':
+  {
+    'firewalld': salt['pillar.get']('firewall:firewalld:status', 'InActive'),
+    'allowed_sources': salt['pillar.get']('firewall:allowed_sources', '127.0.0.1'),
+  },
+} %}
+
+{% do default_config.update(kernel) %}
+{% do default_config.update(firewall) %}
+
+# Merge the default settings with pillar data
+{% set host_lookup = salt['pillar.get']('elasticsearch:lookup', default=default_config, merge=True) %}
