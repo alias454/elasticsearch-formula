@@ -17,20 +17,17 @@ elasticsearch:
       restart_service_after_state_change: 'true'
       unicast_hosts: ['esnode00','esnode01','esnode02',]
       sources:
-        - esnode00:
-          name: 'esnode00'
+        - name: 'esnode00'
           ip: '192.168.2.20'
           mask: '/32'
           fqdn: 'esnode00.alias454.local'
           port: '9300'
-        - esnode01:
-          name: 'esnode01'
+        - name: 'esnode01'
           ip: '192.168.2.19'
           mask: '/32'
           fqdn: 'esnode01.alias454.local'
           port: '9300'
-        - esnode02:
-          name: 'esnode02'
+        - name: 'esnode02'
           ip: '192.168.2.21'
           mask: '/32'
           fqdn: 'esnode02.alias454.local'

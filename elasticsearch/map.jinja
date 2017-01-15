@@ -18,6 +18,17 @@
       'concurrent_recoveries': '2',
       'recovery_max_bytes': '100mb',
       'recovery_concurrent_streams': '5',
+      'sources': 
+      [{
+        'name': 'esnode00',
+        'master_node': 'true',
+        'data_node': 'false',
+        'es_heap_size': '4g',
+        'fqdn': 'esnode00.alias454.local',
+        'ip': '192.168.2.20',
+        'mask': '/32',
+        'port': '9300',
+      },],
       'mounts':
       {
         'create_data_dir': 'true',
