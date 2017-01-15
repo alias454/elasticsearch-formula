@@ -1,4 +1,7 @@
-# Set firewall status to Active or InActive
+# Set firewall status to Active or InActive for the main
+# firewall service. If you want to disable the firewall,
+# set this to 'InActive' and set the overide firewall
+# to Active for the individual applications
 firewall:
   firewalld:
     status: 'Active'
@@ -6,18 +9,29 @@ firewall:
   input_source: [
                   '192.168.2.0/24',
                 ]
-  allowed_sources: [
-                     '192.168.2.19/32',
-                     '192.168.2.20/32',
-                     '192.168.2.21/32',
-                   ]
 
 # Override host options
 elasticsearch:
   lookup:
     elasticsearch:
-      unicast_hosts: ['esnode00','esnode01','esnode02',]
       restart_service_after_state_change: 'true'
-      es_heap_size: '5g'
-      master_node: 'true'
-      data_node: 'true'
+      unicast_hosts: ['esnode00','esnode01','esnode02',]
+      sources:
+        - esnode00:
+          name: 'esnode00'
+          ip: '192.168.2.20'
+          mask: '/32'
+          fqdn: 'esnode00.alias454.local'
+          port: '9300'
+        - esnode01:
+          name: 'esnode01'
+          ip: '192.168.2.19'
+          mask: '/32'
+          fqdn: 'esnode01.alias454.local'
+          port: '9300'
+        - esnode02:
+          name: 'esnode02'
+          ip: '192.168.2.21'
+          mask: '/32'
+          fqdn: 'esnode02.alias454.local'
+          port: '9300'

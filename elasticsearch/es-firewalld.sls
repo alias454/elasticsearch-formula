@@ -1,5 +1,5 @@
 {% from "elasticsearch/map.jinja" import host_lookup as config with context %}
-{% if config.firewall.firewalld == 'Active' %}
+{% if config.firewall.firewalld.status == 'Active' %}
 
 # add some firewall magic
 include:
@@ -18,17 +18,21 @@ command-restorecon-es-/etc/firewalld/services:
     - unless:
       - ls -Z /etc/firewalld/services/es-transport.xml| grep firewalld_etc_rw_t
 
-{% for server in config.firewall.allowed_sources %}
+{% for node in config.elasticsearch.sources %}
 
-command-add-perm-rich-rule-es-transport-{{ server }}:
+command-add-perm-rich-rule-es-transport-{{ node.name }}:
   cmd.run:
-    - name: firewall-cmd --zone=internal --add-rich-rule="rule family="ipv4" source address="{{ server }}" service name="es-transport" accept" --permanent
-    - unless: firewall-cmd --zone=internal --list-all |grep es-transport
+    - name: firewall-cmd --zone=internal --add-rich-rule="rule family="ipv4" source address="{{ node.ip }}{{ node.mask }}" service name="es-transport" accept" --permanent
+    - require:
+      - cmd: command-restorecon-es-/etc/firewalld/services
+    - unless: firewall-cmd --zone=internal --list-all |grep {{ node.ip }}{{ node.mask }} |grep es-transport
 
-command-add-rich-rule-es-transport-{{ server }}:
+command-add-rich-rule-es-transport-{{ node.name }}:
   cmd.run:
-    - name: firewall-cmd --zone=internal --add-rich-rule="rule family="ipv4" source address="{{ server }}" service name="es-transport" accept"
-    - unless: firewall-cmd --zone=internal --list-all |grep es-transport
+    - name: firewall-cmd --zone=internal --add-rich-rule="rule family="ipv4" source address="{{ node.ip }}{{ node.mask }}" service name="es-transport" accept"
+    - require:
+      - cmd: command-restorecon-es-/etc/firewalld/services
+    - unless: firewall-cmd --zone=internal --list-all |grep {{ node.ip }}{{ node.mask }} |grep es-transport
 
 {% endfor %}
 {% endif %}

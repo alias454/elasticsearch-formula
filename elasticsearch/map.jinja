@@ -13,11 +13,7 @@
       'es_heap_size': '2g',
       'mlockall': 'true',
       'network_host': '0.0.0.0',
-      'unicast_hosts': [
-                         'esnode00',
-                         'esnode01',
-                         'esnode02',
-                       ],
+      'unicast_hosts': ['esnode00','esnode01','esnode02',],
       'initial_primaries_recoveries': '2',
       'concurrent_recoveries': '2',
       'recovery_max_bytes': '100mb',
@@ -75,15 +71,18 @@
   },
 } %}
 
-# Configure firewall settings specific for this instance
+# Configure firewall from pillar
 {% set firewall = {
   'firewall':
   {
-    'firewalld': salt['pillar.get']('firewall:firewalld:status', 'InActive'),
-    'allowed_sources': salt['pillar.get']('firewall:allowed_sources', '127.0.0.1'),
+    'firewalld':
+    {
+      'status': salt['pillar.get']('firewall:firewalld:status', 'InActive'),
+    },
   },
 } %}
 
+# update the default config with kernel and firewall config
 {% do default_config.update(kernel) %}
 {% do default_config.update(firewall) %}
 
