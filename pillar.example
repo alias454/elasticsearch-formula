@@ -15,7 +15,7 @@ elasticsearch:
   lookup:
     elasticsearch:
       restart_service_after_state_change: 'true'
-      unicast_hosts: ['esnode00','esnode01','esnode02',]
+      unicast_hosts: '["esnode00","esnode01","esnode02"]'  # Make this the same as your list of masters
       sources:
         - name: 'esnode00'
           ip: '192.168.2.20'
