@@ -6,22 +6,20 @@ firewall:
   firewalld:
     status: 'Active'
     default_zone: 'internal'
-  input_source: [
-                  '192.168.2.0/24',
-                ]
 
 # Override host options
+# Elasticsearch docs https://www.elastic.co/guide/en/elasticsearch/reference/2.4/index.html
 elasticsearch:
   lookup:
     elasticsearch:
       restart_service_after_state_change: 'true'
       unicast_hosts: '["esnode00","esnode01","esnode02"]'  # Make this the same as your list of masters
       sources:
-        - name: 'esnode00'
-          ip: '192.168.2.20'
-          mask: '/32'
-          fqdn: 'esnode00.alias454.local'
-          port: '9300'
+        - name: 'esnode00'                                 # Name of node
+          ip: '192.168.2.110'                              # IP address for this node
+          mask: '/32'                                      # Subnet Mask for this node
+          fqdn: 'esnode00.alias454.local'                  # FQDN can be an IP
+          port: '9300'                                     # Port for es transport on this node
         - name: 'esnode01'
           ip: '192.168.2.19'
           mask: '/32'

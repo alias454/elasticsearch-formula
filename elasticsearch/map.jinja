@@ -73,7 +73,7 @@
   },
 }, grain='host', base='default') %}
 
-# Set kernel parameters to tune this instance
+# Set kernel parameters for tuning
 {% set kernel = {
   'kernel':
   {
@@ -93,7 +93,7 @@
   },
 } %}
 
-# update the default config with kernel and firewall config
+# Update the default config with kernel and firewall config
 {% do default_config.update(kernel) %}
 {% do default_config.update(firewall) %}
 

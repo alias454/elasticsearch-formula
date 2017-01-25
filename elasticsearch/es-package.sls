@@ -1,3 +1,5 @@
+# Install elasticsearch from a package
+
 package-install-elasticsearch:
   pkg.installed:
     - pkgs:

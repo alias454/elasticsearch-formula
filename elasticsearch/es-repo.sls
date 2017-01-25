@@ -1,3 +1,5 @@
+# Configure repo file for RHEL based systems
+
 /etc/yum.repos.d/Elasticsearch-2.x.repo:
   file.managed:
     - source: salt://elasticsearch/files/Elasticsearch-2.x.repo

@@ -1,5 +1,6 @@
 {% from "elasticsearch/map.jinja" import host_lookup as config with context %}
 
+# Create data directory
 {% if config.elasticsearch.mounts.create_data_dir == 'true' %}
 {{ config.elasticsearch.mounts.data_dir_name }}:
   file.directory:
@@ -9,6 +10,7 @@
     - makedirs: True
 {% endif %}
 
+# Create archive  directory
 {% if config.elasticsearch.mounts.create_archive_dir == 'true' %}
 {{ config.elasticsearch.mounts.archive_dir_name }}:
   file.directory:
@@ -18,6 +20,8 @@
     - makedirs: True
 {% endif %}
 
+# Use a mount device for the data mount point
+# and create entry in fstab
 {% if config.elasticsearch.mounts.use_data_mount_device == 'true' %}
 mount-{{ config.elasticsearch.mounts.data_dir_name }}:
   mount.mounted:
@@ -29,7 +33,9 @@ mount-{{ config.elasticsearch.mounts.data_dir_name }}:
       - file: {{ config.elasticsearch.mounts.data_dir_name }}
 {% endif %}
 
-{% if config.elasticsearch.mounts.use_data_mount_device == 'true' %}
+# Use a mount device for the archive mount point
+# and create entry in fstab
+{% if config.elasticsearch.mounts.use_archive_mount_device == 'true' %}
 mount-{{ config.elasticsearch.mounts.archive_dir_name }}:
   mount.mounted:
     - name: {{ config.elasticsearch.mounts.archive_dir_name }}
