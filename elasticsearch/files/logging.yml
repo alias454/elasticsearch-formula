@@ -41,13 +41,13 @@ appender:
       type: consolePattern
       conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
 
-  syslog:
-    type: syslog
-    syslogHost: mcesnode01:514
-    facility: local3
-    layout:
-      type: pattern
-      conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
+  #syslog:
+    #type: syslog
+    #syslogHost: loghost:514
+    #facility: local3
+    #layout:
+      #type: pattern
+      #conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
 
   #file:
    #type: dailyRollingFile

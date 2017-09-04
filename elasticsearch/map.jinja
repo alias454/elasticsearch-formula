@@ -1,9 +1,11 @@
-# Set default setttings
+# Set default elasticsearch settings
 {% set default_config = salt.grains.filter_by({
   'default':
   {
     'elasticsearch':
     {
+      'repo_version': '2.x',
+      'repo_baseurl': 'https://artifacts.elastic.co/packages/2.x/centos',
       'restart_service_after_state_change': 'true',
       'cluster_name': 'graylog',
       'master_node': 'false',
@@ -13,22 +15,12 @@
       'es_heap_size': '2g',
       'mlockall': 'true',
       'network_host': '0.0.0.0',
-      'unicast_hosts': '["esnode00","esnode01","esnode02"]',
+      'unicast_hosts': [],
       'initial_primaries_recoveries': '2',
       'concurrent_recoveries': '2',
       'recovery_max_bytes': '100mb',
       'recovery_concurrent_streams': '5',
-      'sources': 
-      [{
-        'name': 'esnode00',
-        'master_node': 'true',
-        'data_node': 'false',
-        'es_heap_size': '4g',
-        'fqdn': 'esnode00.alias454.local',
-        'ip': '192.168.2.20',
-        'mask': '/32',
-        'port': '9300',
-      },],
+      'sources': [],
       'mounts':
       {
         'create_data_dir': 'true',
@@ -73,7 +65,7 @@
   },
 }, grain='host', base='default') %}
 
-# Set kernel parameters for tuning
+# Set kernel parameters to tune this instance
 {% set kernel = {
   'kernel':
   {

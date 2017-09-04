@@ -9,8 +9,8 @@
 # The primary way of configuring a node is via this file. This template lists
 # the most important settings you may want to configure for a production cluster.
 #
-# Please see the documentation for further information on configuration options:
-# <http://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration.html>
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
 #
 # ---------------------------------- Cluster -----------------------------------
 #
@@ -38,7 +38,7 @@ node.data: {{ config.elasticsearch.data_node }}
 #
 # Add custom attributes to the node:
 #
-# node.rack: r1
+# node.attr.rack: r1
 
 #
 # ----------------------------------- Paths ------------------------------------
@@ -61,7 +61,9 @@ path.logs: {{ config.elasticsearch.log_path }}
 # Elasticsearch performs poorly when the system is swapping the memory.
 # Lock the memory on startup:
 #
-bootstrap.mlockall: {{ config.elasticsearch.mlockall }}
+bootstrap.memory_lock: {{ config.elasticsearch.mlockall }}
+
+# bootstrap.mlockall: {{ config.elasticsearch.mlockall }}
 
 #
 # ---------------------------------- Network -----------------------------------
@@ -73,12 +75,27 @@ network.host: {{ config.elasticsearch.network_host }}
 # Set a custom port for HTTP:
 #
 # http.port: 9200
+
 #
-# For more information, see the documentation at:
-# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html>
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+# For more information, consult the network module documentation.
+#
+discovery.zen.ping.unicast.hosts: {{ config.elasticsearch.unicast_hosts }}
+
+#
+# Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
+#
+# discovery.zen.minimum_master_nodes: 3
+#
+# For more information, consult the zen discovery module documentation.
 
 #
 # --------------------------- Recovery Throttling ------------------------------
+#
 # These settings allow to control the process of shards allocation between
 # nodes during initial recovery, replica allocation, rebalancing,
 # or when adding and removing nodes.
@@ -99,23 +116,7 @@ indices.recovery.max_bytes_per_sec: {{ config.elasticsearch.recovery_max_bytes }
 # Set to limit the number of open concurrent streams when
 # recovering a shard from a peer:
 #
-indices.recovery.concurrent_streams: {{ config.elasticsearch.recovery_concurrent_streams }}
-
-#
-# --------------------------------- Discovery ----------------------------------
-#
-# Pass an initial list of hosts to perform discovery when new node is started:
-# The default list of hosts is ["127.0.0.1", "[::1]"]
-#
-discovery.zen.ping.unicast.hosts: {{ config.elasticsearch.unicast_hosts }}
-
-#
-# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
-#
-# discovery.zen.minimum_master_nodes: 3
-#
-# For more information, see the documentation at:
-# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html>
+#indices.recovery.concurrent_streams: {{ config.elasticsearch.recovery_concurrent_streams }}
 
 #
 # ---------------------------------- Gateway -----------------------------------
@@ -124,8 +125,7 @@ discovery.zen.ping.unicast.hosts: {{ config.elasticsearch.unicast_hosts }}
 #
 # gateway.recover_after_nodes: 3
 #
-# For more information, see the documentation at:
-# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html>
+# For more information, consult the gateway module documentation.
 
 #
 # ---------------------------------- Various -----------------------------------

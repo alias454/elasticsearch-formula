@@ -2,7 +2,7 @@
 elasticsearch-formula
 ================
 
-A saltstack formula to manage elasticsearch on RHEL based systems.
+A saltstack formula to manage elasticsearch 2.x and 5.x clusters on RHEL based systems.
 
 .. note::
 

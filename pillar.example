@@ -8,25 +8,30 @@ firewall:
     default_zone: 'internal'
 
 # Override host options
-# Elasticsearch docs https://www.elastic.co/guide/en/elasticsearch/reference/2.4/index.html
+# Elasticsearch docs https://www.elastic.co/guide/en/elasticsearch/reference/index.html
 elasticsearch:
   lookup:
+    firewall:
+      firewalld:
+        status: 'Active'
     elasticsearch:
+      repo_version: '5.x' # Version and baseurl both change: 2.x and 2.x/centos or 5.x and 5.x/yum
+      repo_baseurl: 'https://artifacts.elastic.co/packages/5.x/yum'
       restart_service_after_state_change: 'true'
       unicast_hosts: '["esnode00","esnode01","esnode02"]'  # Make this the same as your list of masters
       sources:
         - name: 'esnode00'                                 # Name of node
-          ip: '192.168.2.110'                              # IP address for this node
+          ip: '192.168.2.20'                               # IP address for this node
           mask: '/32'                                      # Subnet Mask for this node
           fqdn: 'esnode00.alias454.local'                  # FQDN can be an IP
           port: '9300'                                     # Port for es transport on this node
         - name: 'esnode01'
-          ip: '192.168.2.19'
+          ip: '192.168.2.21'
           mask: '/32'
           fqdn: 'esnode01.alias454.local'
           port: '9300'
         - name: 'esnode02'
-          ip: '192.168.2.21'
+          ip: '192.168.2.22'
           mask: '/32'
           fqdn: 'esnode02.alias454.local'
           port: '9300'
