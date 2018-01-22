@@ -6,4 +6,4 @@ package-install-elasticsearch:
       - java-1.8.0-openjdk-headless
       - elasticsearch
     - require:
-      - file: /etc/yum.repos.d/Elasticsearch.repo
+      - pkgrepo: elasticsearch_repo
