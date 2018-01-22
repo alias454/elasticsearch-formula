@@ -4,11 +4,14 @@
 {% if config.elasticsearch.repo_version == '5.x' %}
 /etc/systemd/system/elasticsearch.service.d/elasticsearch.conf:
   file.managed:
-    - source: salt://elasticsearch/files/elasticsearch.systemd.conf
     - makedirs: true
     - user: root
     - group: root
     - mode: '0640'
+    - contents: |
+        # Use if mlockall is set
+        [Service]
+        LimitMEMLOCK=infinity
 {% endif %}
 
 # Make sure the service is running and restart the service unless
