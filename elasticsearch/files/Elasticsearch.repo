@@ -1,9 +1,0 @@
-{% from "elasticsearch/map.jinja" import host_lookup as config with context -%}
-# Managed by Salt do not edit
-
-[elasticsearch-{{ config.elasticsearch.repo_version }}]
-name=Elasticsearch repository for {{ config.elasticsearch.repo_version }} packages
-baseurl={{ config.elasticsearch.repo_baseurl }}
-gpgcheck=1
-gpgkey=https://packages.elastic.co/GPG-KEY-elasticsearch
-enabled=1

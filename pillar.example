@@ -17,6 +17,7 @@ elasticsearch:
     elasticsearch:
       repo_version: '5.x' # Version and baseurl both change: 2.x and 2.x/centos or 5.x and 5.x/yum
       repo_baseurl: 'https://artifacts.elastic.co/packages/5.x/yum'
+      repo_gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
       restart_service_after_state_change: 'true'
       unicast_hosts: '["esnode00","esnode01","esnode02"]'  # Make this the same as your list of masters
       sources:
