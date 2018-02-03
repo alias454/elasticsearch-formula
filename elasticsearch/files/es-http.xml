@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <service>
+    <short>es-http</short>
+    <description>allow access to the elasticsearch http port.</description>
+    <port protocol="tcp" port="9200"/>
+  </service>

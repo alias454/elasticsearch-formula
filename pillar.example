@@ -20,19 +20,30 @@ elasticsearch:
       repo_gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
       restart_service_after_state_change: 'true'
       unicast_hosts: '["esnode00","esnode01","esnode02"]'  # Make this the same as your list of masters
-      sources:
-        - name: 'esnode00'                                 # Name of node
-          ip: '192.168.2.20'                               # IP address for this node
-          mask: '/32'                                      # Subnet Mask for this node
-          fqdn: 'esnode00.alias454.local'                  # FQDN can be an IP
-          port: '9300'                                     # Port for es transport on this node
+      http_allowed_sources:                                # Sources to allow HTTP connections from
+        - name: 'esnode00'                                 # Arbitrary name (using node name is a good default)
+          ip: '192.168.2.20'                               # IP address
+          mask: '/32'                                      # Subnet Mask
+          port: '9200'                                     # Port for http access
         - name: 'esnode01'
           ip: '192.168.2.21'
           mask: '/32'
-          fqdn: 'esnode01.alias454.local'
+          port: '9200'
+        - name: 'esnode02'
+          ip: '192.168.2.22'
+          mask: '/32'
+          port: '9200'
+      sources:                                             # Sources to allow ES transport connections from
+        - name: 'esnode00'                                 # Arbitrary name (using node name is a good default)
+          ip: '192.168.2.20'                               # IP address
+          mask: '/32'                                      # Subnet Mask
+          port: '9300'                                     # Port for es transport access
+        - name: 'esnode01'
+          ip: '192.168.2.21'
+          mask: '/32'
           port: '9300'
         - name: 'esnode02'
           ip: '192.168.2.22'
           mask: '/32'
-          fqdn: 'esnode02.alias454.local'
           port: '9300'
+
