@@ -4,9 +4,6 @@
   {
     'elasticsearch':
     {
-      'repo_version': '2.x',
-      'repo_baseurl': 'https://packages.elastic.co/elasticsearch/2.x/centos',
-      'repo_gpgkey': 'https://packages.elastic.co/GPG-KEY-elasticsearch',
       'restart_service_after_state_change': 'true',
       'cluster_name': 'graylog',
       'master_node': 'false',
@@ -52,7 +49,7 @@
     {
       'master_node': 'false',
       'data_node': 'true',
-      'es_heap_size': '8g',
+      'es_heap_size': '4g',
     },
   },
   'esnode02':
@@ -61,7 +58,7 @@
     {
       'master_node': 'false',
       'data_node': 'true',
-      'es_heap_size': '8g',
+      'es_heap_size': '4g',
     },
   },
 }, grain='host', base='default') %}
@@ -76,19 +73,61 @@
 } %}
 
 # Configure firewall from pillar
-{% set firewall = {
-  'firewall':
+{% set os_lookup = {
+  'RedHat':
   {
-    'firewalld':
+    'firewall':
     {
-      'status': salt['pillar.get']('firewall:firewalld:status', 'InActive'),
-    },
+      'firewall_include': 'es-firewalld',
+      'firewalld':
+      {
+        'status': salt['pillar.get']('firewall:firewalld:status', 'InActive')
+      }
+    }
   },
+  'Debian':
+  {
+    'firewall':
+    {
+      'firewall_include': 'es-iptables',
+      'iptables':
+      {
+        'status': salt['pillar.get']('firewall:iptables:status', 'InActive')
+      }
+    }
+  }
 } %}
+{% set firewall = os_lookup.get(grains.os_family, {}) %} 
+
+# Get settings for os_family
+{% set os_lookup = {
+  'RedHat':
+  {
+    'package':
+    {
+      'repo_version': '2.x',
+      'repo_baseurl': 'https://packages.elastic.co/elasticsearch/2.x/centos',
+      'repo_gpgkey': 'https://packages.elastic.co/GPG-KEY-elasticsearch',
+      'java_pkg_name': 'java-1.8.0-openjdk-headless'
+    }
+  },
+  'Debian':
+  {
+    'package':
+    {
+      'repo_version': '2.x',
+      'repo_baseurl': 'deb https://packages.elastic.co/elasticsearch/2.x/debian stable main',
+      'repo_gpgkey': 'https://packages.elastic.co/GPG-KEY-elasticsearch',
+      'java_pkg_name': 'openjdk-8-jdk-headless'
+    }
+  }
+} %}
+{% set os_map = os_lookup.get(grains.os_family, {}) %} 
 
 # Update the default config with kernel and firewall config
 {% do default_config.update(kernel) %}
 {% do default_config.update(firewall) %}
+{% do default_config.update(os_map) %}
 
 # Merge the default settings with pillar data
 {% set host_lookup = salt['pillar.get']('elasticsearch:lookup', default=default_config, merge=True) %}

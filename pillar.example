@@ -14,10 +14,19 @@ elasticsearch:
     firewall:
       firewalld:
         status: 'Active'
-    elasticsearch:
+    package:
+    {% if grains['os_family'] == 'RedHat' %}
       repo_version: '5.x' # Version and baseurl both change: 2.x and 2.x/centos or 5.x and 5.x/yum
       repo_baseurl: 'https://artifacts.elastic.co/packages/5.x/yum'
       repo_gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
+      java_pkg_name: 'java-1.8.0-openjdk-headless'
+    {% elif grains['os_family'] == 'Debian' %}
+      repo_version: '5.x' # Version and baseurl both change: 2.x and 2.x/debian or 5.x and 5.x/apt
+      repo_baseurl: 'deb https://artifacts.elastic.co/packages/5.x/apt stable main'
+      repo_gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
+      java_pkg_name: 'openjdk-8-jdk-headless'
+    {% endif %}
+    elasticsearch:
       restart_service_after_state_change: 'true'
       unicast_hosts: '["esnode00","esnode01","esnode02"]'  # Make this the same as your list of masters
       http_allowed_sources:                                # Sources to allow HTTP connections from

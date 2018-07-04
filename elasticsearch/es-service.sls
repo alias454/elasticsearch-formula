@@ -1,7 +1,7 @@
 {% from "elasticsearch/map.jinja" import host_lookup as config with context %}
 
 # Create elasticsearch config override for systemd service
-{% if config.elasticsearch.repo_version == '5.x' %}
+{% if config.package.repo_version == '5.x' %}
 /etc/systemd/system/elasticsearch.service.d/elasticsearch.conf:
   file.managed:
     - makedirs: true

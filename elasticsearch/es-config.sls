@@ -10,7 +10,7 @@
     - mode: '0640'
 
 # Check if elasticsearch version is 2.x
-{% if config.elasticsearch.repo_version == '2.x' %}
+{% if config.package.repo_version == '2.x' %}
 
 # Create elasticsearch logging config file using 2.x template
 /etc/elasticsearch/logging.yml:
@@ -31,7 +31,7 @@ java_heap_setting:
         ES_HEAP_SIZE={{ config.elasticsearch.es_heap_size }}
 
 # Check if elasticsearch version is 5.x
-{% elif config.elasticsearch.repo_version == '5.x' %}
+{% elif config.package.repo_version == '5.x' %}
 
 # Create elasticsearch logging config file using 5.x template
 /etc/elasticsearch/log4j2.properties:
