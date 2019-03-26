@@ -33,7 +33,7 @@ java_heap_setting:
 # Elasticsearch version is not 2.x
 {% else %}
 
-# Create elasticsearch logging config file using 5.x template
+# Create elasticsearch logging config file using template
 /etc/elasticsearch/log4j2.properties:
   file.managed:
     - source: salt://elasticsearch/files/log4j2.properties
